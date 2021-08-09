@@ -44,11 +44,12 @@ browser.tabs.onCreated.addListener(function(tab) {
 				})
 				.then(function() {
 					// in all cases scroll tab bar to the right
-					browser.tabs.update(tab.id, { active: true });
-
-					if (loadInBackground) {
-						browser.tabs.update(lastActiveTab.id, { active: true });
-					}
+					browser.tabs.update(tab.id, { active: true }).then(function(updatedTab) {
+						if (loadInBackground) {
+							// update to opener tab
+							browser.tabs.update(updatedTab.openerTabId, { active: true });
+						}
+					});
 				});
 			}
 		});
